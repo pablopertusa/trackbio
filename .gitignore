@@ -3,3 +3,5 @@ data/copernicus-data
 data/penguin_data.csv
 data/copernicus
 src/python/utils/__pycache__/
+src/jupyter/request_testing.ipynb
+src/documentation
