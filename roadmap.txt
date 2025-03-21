@@ -1,9 +1,0 @@
-Próximo:
-- Conseguir todos los datos necesarios de copernicus
-- Pasar la representación de gps de la especie a grid
-- Pasar la representación de copernicus a grid (ya está como un grid pero puede ser que las celdas sean demasiado pequeñas)
-
-Info: 
-- Modelos como SAR (Spatial Autoregressive Model) y CAR (Conditional Autoregressive Model) pueden capturar la correlación entre celdas vecinas.
-- GWR (Geographically Weighted Regression) ajusta un modelo en cada punto, ponderando los vecinos.
-- Datos de tráfico de barcos https://datacatalog.worldbank.org/search/dataset/0037580
