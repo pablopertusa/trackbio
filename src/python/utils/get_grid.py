@@ -30,19 +30,19 @@ for y in range(fecha_min.year, fecha_max.year+1):
     if y == 1999:
         fin = datetime.strptime("31-12-1999", "%d-%m-%Y")
         fin_format = fin.strftime("%Y-%m-%dT%H:%M:%S")
-        ds = get_data.make_request_and_open_copernicus("cmems_mod_glo_phy_my_0.083deg_P1D-m", f"Global_Ocean_Physics_Reanalysis_year_{y}.nc",
+        get_data.make_request_copernicus("cmems_mod_glo_phy_my_0.083deg_P1D-m", f"Global_Ocean_Physics_Reanalysis_year_{y}.nc",
                                                 fecha_min_format, fin_format, max_latitude, min_latitude, max_longitude, min_longitude)
     elif y == fecha_max.year:
         inicio = datetime.strptime(f"1-1-{y}", "%d-%m-%Y")
         inicio_format = fin.strftime("%Y-%m-%dT%H:%M:%S")
-        ds = get_data.make_request_and_open_copernicus("cmems_mod_glo_phy_my_0.083deg_P1D-m", f"Global_Ocean_Physics_Reanalysis_year_{y}.nc",
+        get_data.make_request_copernicus("cmems_mod_glo_phy_my_0.083deg_P1D-m", f"Global_Ocean_Physics_Reanalysis_year_{y}.nc",
                                                 inicio_format, fecha_max_format, max_latitude, min_latitude, max_longitude, min_longitude)
     else:
         inicio = datetime.strptime(f"1-1-{y}", "%d-%m-%Y")
         fin = datetime.strptime(f"31-12-{y}", "%d-%m-%Y")
         inicio_format = inicio.strftime("%Y-%m-%dT%H:%M:%S")
         fin_format = fin.strftime("%Y-%m-%dT%H:%M:%S")
-        ds = get_data.make_request_and_open_copernicus("cmems_mod_glo_phy_my_0.083deg_P1D-m", f"Global_Ocean_Physics_Reanalysis_year_{y}.nc",
+        get_data.make_request_copernicus("cmems_mod_glo_phy_my_0.083deg_P1D-m", f"Global_Ocean_Physics_Reanalysis_year_{y}.nc",
                                                 inicio_format, fin_format, max_latitude, min_latitude, max_longitude, min_longitude)
     print(f"AÑO: {y} FINALIZADO")
 print("Fin de descarga de datos")
