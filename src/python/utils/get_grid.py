@@ -19,5 +19,5 @@ for file in path.iterdir():
         data_binned = data.groupby_bins("latitude", lat_bins, labels=lat_labels).mean()
         data_binned = data_binned.groupby_bins("longitude", lon_bins, labels=lon_labels).mean()
 
-        data_binned.to_netcdf(f"{output}/{file.name}_binned.nc")
+        data_binned.to_netcdf(f"{output}/{file.name[:-3]}_binned.nc")
         print(file, "terminado")
