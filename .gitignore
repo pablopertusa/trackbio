@@ -5,3 +5,4 @@ data/copernicus
 src/python/utils/__pycache__/
 src/jupyter/request_testing.ipynb
 src/documentation
+.env
