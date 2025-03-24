@@ -12,6 +12,7 @@ def get_data(dataset_id: str, output_file: str) -> bool:
 
         username = os.getenv("USERNAME_COPERNICUS")
         password = os.getenv("PASSWORD_COPERNICUS")
+
         # Nos logeamos en la API de Copernicusmarine
         cm.login(username=username, password=password)
 
