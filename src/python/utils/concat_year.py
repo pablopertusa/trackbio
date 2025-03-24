@@ -21,6 +21,7 @@ def concat_year(directory: str, filename: str) -> bool:
         return False
 
 directory = "data/copernicus/processed"
-filename = "Global_Ocean_Physics_Reanalysis_year"
+filename = ["Global_Ocean_Physics_Reanalysis_year"]
 
-concat_year(directory, filename)
+for f in filename:
+    concat_year(directory, filename)

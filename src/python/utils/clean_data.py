@@ -18,6 +18,7 @@ def clean_data(filename_input: str, filename_output: str, method: str = "Linear"
         print(e)
         return False
 
-filename_input = "/home/pablo/Desktop/zird/2/proy/trackbio/data/copernicus/processed/dataset_concat.nc"
-filename_output = "/home/pablo/Desktop/zird/2/proy/trackbio/data/copernicus/processed/clean_data.nc"
-clean_data(filename_input, filename_output)
+filename_input = ["/home/pablo/Desktop/zird/2/proy/trackbio/data/copernicus/processed/dataset_concat.nc"]
+filename_output = ["/home/pablo/Desktop/zird/2/proy/trackbio/data/copernicus/processed/clean_data.nc"]
+for fi, fo in zip(filename_input, filename_output):
+    clean_data(fi, fo)

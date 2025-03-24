@@ -68,7 +68,8 @@ def get_data(dataset_id: str, output_file: str) -> bool:
         print(e)
         return False
 
-dataset_id = "cmems_mod_glo_phy_my_0.083deg_P1D-m"
-output_file_name = "Global_Ocean_Physics_Reanalysis_year"
+dataset_id = ["cmems_mod_glo_phy_my_0.083deg_P1D-m"]
+output_file_name = ["Global_Ocean_Physics_Reanalysis_year"]
 
-get_data(dataset_id, output_file_name)
+for d, o in zip(dataset_id, output_file_name):
+    get_data(dataset_id, output_file_name)
