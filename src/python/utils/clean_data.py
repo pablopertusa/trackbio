@@ -10,7 +10,8 @@ def clean_data(filename_input: str, filename_output: str, method: str = "Linear"
         print("interpolando...")
         data = data.interpolate_na(dim="time", method=method) # Quitamos los NaN interpolando sobre la dimensión del tiempo
 
-        data.to_netcdf()
+        data["time"] = data["time"].astype("datetime64[h]") # Precisión de hora
+        data.to_netcdf(filename_output)
         print("dataset procesado")
         return True
     except Exception as e:
