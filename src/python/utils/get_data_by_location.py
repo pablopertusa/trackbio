@@ -1,7 +1,7 @@
 import polars as pl
 import xarray as xr
 
-def get_data_by_location(data_tracking, data_climate): # Falta terminar para que no consuma tanta memoria (actualmente necesita 1.8 TB)
+def get_data_by_location(data_tracking, data_climate):
     # Seleccionar la celda de la cuadrícula más cercana
     data_tracking = data_tracking.with_columns(
         pl.lit(data_climate["latitude_bins"].sel(latitude_bins=data_tracking["decimal_latitude"].to_numpy(), method="nearest").values).alias("lat_grid_lookup"),

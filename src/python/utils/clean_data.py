@@ -7,13 +7,14 @@ def clean_data(filename_input: str, filename_output: str, method: str = "Linear"
         data = data.drop_vars(["siconc", "sithick"]) # Estas variables eran todo NaN
         data = data.drop_duplicates(dim="time") # Había duplicados debido a cómo se hacían las requests
         print("duplicados eliminados")
+
         print("interpolando...")
         data = data.interpolate_na(dim="time", method=method) # Quitamos los NaN interpolando sobre la dimensión del tiempo
-
         data["time"] = data["time"].astype("datetime64[h]") # Precisión de hora
         data.to_netcdf(filename_output)
         print("dataset procesado")
         return True
+
     except Exception as e:
         print("Ha ocurrido un error:")
         print(e)
