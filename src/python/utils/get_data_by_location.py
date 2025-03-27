@@ -33,6 +33,15 @@ def get_data_by_location(data_tracking, data_climate): # Falta terminar para que
 
 data_tracking = pl.read_csv("data/animals_processed.csv")
 data_climate = xr.open_dataset("data/copernicus/processed/clean_data.nc")
-data_tracking = data_tracking.head(100)
+resul = pl.DataFrame()
 
-print(get_data_by_location(data_tracking, data_climate))
+# Procesar de 100 en 100
+batch_size = 200
+for i in range(0, len(data_tracking), batch_size):
+    print(f"Batch {i} procesado")
+    batch = data_tracking.slice(i, batch_size)  # Seleccionar 100 filas
+    processed = get_data_by_location(batch, data_climate)
+    resul = pl.concat([resul, processed])  # Concatenar al resultado
+
+print("Procesado terminado")
+resul.write_csv("data/final_data.csv")
