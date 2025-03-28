@@ -35,7 +35,7 @@ data_tracking = pl.read_csv("data/animals_processed.csv")
 data_climate = xr.open_dataset("data/copernicus/processed/clean_data.nc")
 resul = pl.DataFrame()
 
-# Procesar de 100 en 100
+# Procesar en batches
 batch_size = 200
 for i in range(0, len(data_tracking), batch_size):
     print(f"Batch {i} procesado")

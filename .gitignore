@@ -4,5 +4,6 @@ src/jupyter/request_testing.ipynb
 src/documentation
 .env
 src/jupyter/pruebas.ipynb
-data/animals.csv
+data/not_use
+data/foca.csv
 data/final_data.csv
