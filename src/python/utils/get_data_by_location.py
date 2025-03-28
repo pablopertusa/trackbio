@@ -32,7 +32,6 @@ def get_data_by_location(data_tracking, data_climate):
 
 
 data_tracking = pl.read_csv("data/foca_procesado.csv")
-data_tracking = data_tracking.head(600)
 data_climate = xr.open_dataset("data/copernicus/processed/clean_data.nc")
 resul = pl.DataFrame()
 

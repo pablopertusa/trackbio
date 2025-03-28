@@ -42,7 +42,7 @@ def get_data(dataset_id: str, output_file: str) -> bool:
         for y in range(fecha_min.year, fecha_max.year+1):
             print("---------------------------")
             print(f"AÑO: {y}")
-            if y == 1999:
+            if y == fecha_min.year:
                 fin = datetime.strptime("31-12-1999", "%d-%m-%Y")
                 fin_format = fin.strftime("%Y-%m-%dT%H:%M:%S")
                 make_requests.make_request_copernicus(f"{dataset_id}", f"{output_file}_{y}.nc",
