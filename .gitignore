@@ -1,10 +1,9 @@
 data/copernicus
 src/python/utils/__pycache__/
-src/jupyter/request_testing.ipynb
 src/documentation
 .env
 src/jupyter/pruebas.ipynb
-data/not_use
 data/foca.csv
 data/final_data.csv
 data/foca_procesado.csv
+model_example/
