@@ -1,6 +1,9 @@
 import polars as pl
 import xarray as xr
 
+# Esto en principio no lo usaremos porque combina los dos datos para tener el dataset final commbinado en forma de 
+# tabla, pero este enfoque no es el que usaremos, sino que trabajaremos con ambos datos en forma de grid por separado.
+
 def get_data_by_location(data_tracking, data_climate):
     # Seleccionar la celda de la cuadrícula más cercana
     data_tracking = data_tracking.with_columns(

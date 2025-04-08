@@ -5,7 +5,12 @@ import copernicusmarine as cm
 from dotenv import load_dotenv
 import os
 
-def get_data(dataset_id: str, output_file: str) -> bool:
+def get_data(dataset_id: str, output_file: str, output_directory: str = "/home/pablo/Desktop/zird/2/proy/trackbio/data/copernicus/raw") -> bool:
+    """
+    Descarga el dataset de la API de Copernicus con el id `dataset_id`
+    y lo escribe en `output_file` en `output_directory`.
+    Devuelve True si la descarga se realiza correctamente, False en otro caso.
+    """
     try: 
         # Cargamos desde .env
         load_dotenv()
@@ -43,22 +48,22 @@ def get_data(dataset_id: str, output_file: str) -> bool:
             print("---------------------------")
             print(f"AÑO: {y}")
             if y == fecha_min.year:
-                fin = datetime.strptime("31-12-1999", "%d-%m-%Y")
+                fin = datetime.strptime(f"31-12-{y}", "%d-%m-%Y")
                 fin_format = fin.strftime("%Y-%m-%dT%H:%M:%S")
-                make_requests.make_request_copernicus(f"{dataset_id}", f"{output_file}_{y}.nc",
-                                                        fecha_min_format, fin_format, max_latitude, min_latitude, max_longitude, min_longitude)
+                make_requests.make_request_copernicus(dataset_id, f"{output_file}_{y}.nc",
+                                                        fecha_min_format, fin_format, max_latitude, min_latitude, max_longitude, min_longitude, output_directory)
             elif y == fecha_max.year:
                 inicio = datetime.strptime(f"1-1-{y}", "%d-%m-%Y")
                 inicio_format = fin.strftime("%Y-%m-%dT%H:%M:%S")
-                make_requests.make_request_copernicus(f"{dataset_id}", f"{output_file}_{y}.nc",
-                                                        inicio_format, fecha_max_format, max_latitude, min_latitude, max_longitude, min_longitude)
+                make_requests.make_request_copernicus(dataset_id, f"{output_file}_{y}.nc",
+                                                        inicio_format, fecha_max_format, max_latitude, min_latitude, max_longitude, min_longitude, output_directory)
             else:
                 inicio = datetime.strptime(f"1-1-{y}", "%d-%m-%Y")
                 fin = datetime.strptime(f"31-12-{y}", "%d-%m-%Y")
                 inicio_format = inicio.strftime("%Y-%m-%dT%H:%M:%S")
                 fin_format = fin.strftime("%Y-%m-%dT%H:%M:%S")
-                make_requests.make_request_copernicus(f"{dataset_id}", f"{output_file}_{y}.nc",
-                                                        inicio_format, fin_format, max_latitude, min_latitude, max_longitude, min_longitude)
+                make_requests.make_request_copernicus(dataset_id, f"{output_file}_{y}.nc",
+                                                        inicio_format, fin_format, max_latitude, min_latitude, max_longitude, min_longitude, output_directory)
             print(f"AÑO: {y} FINALIZADO")
         print("Fin de descarga de datos")
         return True
@@ -68,8 +73,11 @@ def get_data(dataset_id: str, output_file: str) -> bool:
         print(e)
         return False
 
-dataset_id = ["cmems_mod_glo_phy_my_0.083deg_P1D-m"]
-output_file_name = ["Global_Ocean_Physics_Reanalysis_year"]
 
-for d, o in zip(dataset_id, output_file_name):
-    get_data(dataset_id, output_file_name)
+
+if __name__ == "__main__":
+    dataset_id = ["cmems_mod_glo_phy_my_0.083deg_P1D-m"] 
+    output_file_name = ["Global_Ocean_Physics_Reanalysis_year"] # La extensión .nc se pone automáticamente en la función get_data
+
+    for d, o in zip(dataset_id, output_file_name):
+        get_data(d, o)
