@@ -1,5 +1,5 @@
 # Esta función descarga los datos necesarios de la API de copernicus
-from ..utils import get_data
+from src.python.utils.get_data import get_data
 
 def download_data(dataset_list: list[str], box_path: str, temp_path: str, output_directory: str) -> bool:
     """
