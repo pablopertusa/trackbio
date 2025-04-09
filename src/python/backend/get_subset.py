@@ -24,7 +24,7 @@ def get_subset(path_to_csv: str, output_directory: str) -> bool:
         min_longitude = tracking["longitude"].min()
 
         box = pl.DataFrame({"max_latitude": max_latitude, "min_latitude": min_latitude, "max_longitude": max_longitude, "min_longitude": min_longitude})
-        box.write_csv(f"{output_directory}/data/world_box.csv")
+        box.write_csv(f"{output_directory}/world_box.csv")
 
         temp = pl.DataFrame({"first": [1, 0], "day": [tracking.head(1)["date"].to_list()[0].day, tracking.tail(1)["date"].to_list()[0].day], 
                                                     "month": [tracking.head(1)["date"].to_list()[0].month, tracking.tail(1)["date"].to_list()[0].month], 
