@@ -4,7 +4,6 @@ src/documentation
 .env
 src/jupyter/pruebas.ipynb
 data/foca.csv
-data/final_data.csv
 data/foca_procesado.csv
 model_example/
 data/grid_presencia.nc
