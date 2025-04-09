@@ -8,7 +8,7 @@ def get_subset(path_to_csv: str, output_directory: str) -> bool:
     """
     Toma como input el CSV donde están los datos del animal y devuelve True si todo se ha podido realizar correctamente. False
     de lo contrario.
-    **Importante**: En el CSV se espera que estén presentes las columnas "Latitude", "Longitude" y "Date" con formato "Y-%m-%dT%H:%M:%S".
+    **Importante**: En el CSV se espera que estén presentes las columnas "latitude", "longitude" y "date" con formato "Y-%m-%dT%H:%M:%S".
     """
     try:
         tracking = pl.read_csv(path_to_csv)
@@ -18,10 +18,10 @@ def get_subset(path_to_csv: str, output_directory: str) -> bool:
                 pl.col("date").str.strptime(pl.Datetime, format="%Y-%m-%dT%H:%M:%S")
             )
         )
-        max_latitude = tracking["Latitude"].max()
-        max_longitude = tracking["Longitude"].max()
-        min_latitude = tracking["Latitude"].min()
-        min_longitude = tracking["Longitude"].min()
+        max_latitude = tracking["latitude"].max()
+        max_longitude = tracking["longitude"].max()
+        min_latitude = tracking["latitude"].min()
+        min_longitude = tracking["longitude"].min()
 
         box = pl.DataFrame({"max_latitude": max_latitude, "min_latitude": min_latitude, "max_longitude": max_longitude, "min_longitude": min_longitude})
         box.write_csv(f"{output_directory}/data/world_box.csv")

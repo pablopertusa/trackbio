@@ -1,4 +1,4 @@
-import make_requests
+import src.python.utils.make_requests as make_requests
 import polars as pl
 from datetime import datetime
 import copernicusmarine as cm
