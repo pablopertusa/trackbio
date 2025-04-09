@@ -7,7 +7,7 @@
         "cmems_mod_glo_bgc-nut_anfc_0.25deg_P1D-m",
         "cmems_mod_glo_bgc-bio_anfc_0.25deg_P1D-m"
     ],
-    "animal_data": "data/foca_procesado.csv",
+    "animal_data": "data/foca_mini.csv",
     "data_folder": "data/",
     "grid_size": 1
 }

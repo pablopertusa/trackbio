@@ -29,7 +29,7 @@ if success_subset:
     # Descargamos los datos
     success_download = download_data(copernicus_datasets, box_path, temp_path, output_directory)
 else:
-    print("Error en download, no continuamos")
+    print("Error en subset, no continuamos")
 
 if success_download:
     input_directory = data_folder + "copernicus/raw"
@@ -42,7 +42,7 @@ if success_download:
     # Hacemos el grid de los archivos más grande para que todos coincidan y sean manejables
     success_binning = make_grid_files(input_directory, output_directory, grid_size, lat_min, lat_max, lon_min, lon_max)
 else:
-    print("Error en binning, no continuamos")
+    print("Error en download, no continuamos")
 
 if success_binning:
     input_directory = data_folder + "copernicus/processed"
@@ -56,7 +56,7 @@ if success_binning:
         success_concat_list.append(success_aux)
     success_concat = all(success_concat_list)
 else:
-    print("Error en concat, no continuamos")
+    print("Error en binning, no continuamos")
 
 if success_concat:
     print("Hemos llegado al final")
