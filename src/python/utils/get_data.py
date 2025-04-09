@@ -5,10 +5,9 @@ import copernicusmarine as cm
 from dotenv import load_dotenv
 import os
 
-def get_data(dataset_id: str, output_file: str, output_directory: str = "/home/pablo/Desktop/zird/2/proy/trackbio/data/copernicus/raw") -> bool:
+def get_data(dataset_id: str, temp_path: str, box_path: str, output_file: str, output_directory: str = "/home/pablo/Desktop/zird/2/proy/trackbio/data/copernicus/raw") -> bool:
     """
     Descarga el dataset de la API de Copernicus con el id `dataset_id`
-    y lo escribe en `output_file` en `output_directory`.
     Devuelve True si la descarga se realiza correctamente, False en otro caso.
     """
     try: 
@@ -19,11 +18,11 @@ def get_data(dataset_id: str, output_file: str, output_directory: str = "/home/p
         password = os.getenv("PASSWORD_COPERNICUS")
 
         # Nos logeamos en la API de Copernicusmarine
-        cm.login(username=username, password=password)
+        cm.login(username=username, password=password, force_overwrite=True)
 
         # Cogemos el subconjunto de los datos que necesitamos
-        temp = pl.read_csv("data/temporal_subset.csv")
-        box = pl.read_csv("data/world_box.csv")
+        temp = pl.read_csv(temp_path)
+        box = pl.read_csv(box_path)
 
         day = temp.filter(pl.col("first") == 1)["day"].to_list()[0]
         month = temp.filter(pl.col("first") == 1)["month"].to_list()[0]

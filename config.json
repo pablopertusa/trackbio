@@ -1,0 +1,13 @@
+{
+    "copernicus_datasets": [
+        "cmems_mod_glo_phy_my_0.083deg_P1D-m",
+        "cmems_mod_glo_bgc-pft_anfc_0.25deg_P1D-m",
+        "cmems_mod_glo_bgc-car_anfc_0.25deg_P1D-m",
+        "cmems_mod_glo_bgc-co2_anfc_0.25deg_P1D-m",
+        "cmems_mod_glo_bgc-nut_anfc_0.25deg_P1D-m",
+        "cmems_mod_glo_bgc-bio_anfc_0.25deg_P1D-m"
+    ],
+    "animal_data": "data/foca_procesado.csv",
+    "data_folder": "data/",
+    "grid_size": 1
+}

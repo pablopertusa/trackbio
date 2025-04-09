@@ -1,0 +1,6 @@
+polars
+xarray
+pandas
+numpy
+copernicusmarine
+dotenv

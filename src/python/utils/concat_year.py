@@ -2,7 +2,7 @@ import xarray as xr
 from pathlib import Path
 import polars as pl
 
-def concat_year(directory: str, filename: str, min_year: int, max_year:int) -> bool:
+def concat_year(directory: str, filename: str, min_year: int, max_year: int) -> bool:
     try:
         dataset_concat = xr.open_dataset(f"{directory}/{filename}_{min_year}_binned.nc") # El archivo más antiguo sobre el que se va a concatenar
 
@@ -21,11 +21,12 @@ def concat_year(directory: str, filename: str, min_year: int, max_year:int) -> b
         print(e)
         return False
 
-directory = "data/copernicus/processed"
-filename = ["Global_Ocean_Physics_Reanalysis"]
-temp = pl.read_csv("/home/pablo/Desktop/zird/2/proy/trackbio/data/temporal_subset.csv")
-min_year = temp.filter(pl.col("first") == 1)["year"].to_list()[0]
-max_year = temp.filter(pl.col("first") == 0)["year"].to_list()[0]
+if __name__ == "__main__":
+    directory = "data/copernicus/processed"
+    filename = ["Global_Ocean_Physics_Reanalysis"]
+    temp = pl.read_csv("/home/pablo/Desktop/zird/2/proy/trackbio/data/temporal_subset.csv")
+    min_year = temp.filter(pl.col("first") == 1)["year"].to_list()[0]
+    max_year = temp.filter(pl.col("first") == 0)["year"].to_list()[0]
 
-for f in filename:
-    concat_year(directory, f, min_year, max_year)
+    for f in filename:
+        concat_year(directory, f, min_year, max_year)
