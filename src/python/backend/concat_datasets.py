@@ -18,7 +18,7 @@ def concat_datasets(dataset_list: list[str], input_directory: str, min_year: int
             data_dict[dataset] = data
         data_list = list(data_dict.values())
         data_combined = xr.merge(data_list)
-        data_combined.to_netcdf(f"{input_directory}/data_concat.nc")
+        data_combined.to_netcdf(f"{input_directory}/data_combined.nc")
 
         return True
 
