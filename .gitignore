@@ -1,4 +1,4 @@
-data/copernicus
+data/copernicus/*/*.nc
 src/python/utils/__pycache__/
 src/documentation
 .env
