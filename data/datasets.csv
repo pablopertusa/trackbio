@@ -1,7 +1,0 @@
-datasets,info
-cmems_mod_glo_phy_my_0.083deg_P1D-m,variables del mar
-cmems_mod_glo_bgc-pft_anfc_0.25deg_P1D-m,registros de plankton
-cmems_mod_glo_bgc-car_anfc_0.25deg_P1D-m,registros carbon en el mar
-cmems_mod_glo_bgc-co2_anfc_0.25deg_P1D-m,registros CO2
-cmems_mod_glo_bgc-nut_anfc_0.25deg_P1D-m,registros nutrientes
-cmems_mod_glo_bgc-bio_anfc_0.25deg_P1D-m,produccion de oxigeno
