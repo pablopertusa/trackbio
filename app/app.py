@@ -4,6 +4,7 @@ from src.python.backend.download_data import download_data
 from src.python.backend.get_subset import get_subset
 from src.python.utils.get_grid import make_grid_files
 from src.python.utils.concat_year import concat_year
+from src.python.backend.concat_datasets import concat_datasets
 
 def run_pipeline(config_path="config.json"):
     try:
@@ -63,15 +64,8 @@ def run_pipeline(config_path="config.json"):
     min_year = df_temp.filter(pl.col("first") == 1)["year"].to_list()[0]
     max_year = df_temp.filter(pl.col("first") == 0)["year"].to_list()[0]
 
-    success_concat_list = []
-    for dataset in copernicus_datasets:
-        success_aux = concat_year(input_directory, dataset, min_year, max_year)
-        if not success_aux:
-            print(f"Error al concatenar dataset {dataset}, no continuamos")
-            return
-        success_concat_list.append(success_aux)
+    success_concat = concat_datasets(copernicus_datasets, input_directory, min_year, max_year)
 
-    success_concat = all(success_concat_list)
     if success_concat:
         print("Hemos llegado al final")
     else:
