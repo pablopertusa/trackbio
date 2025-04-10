@@ -14,8 +14,8 @@ def concat_datasets(dataset_list: list[str], input_directory: str, min_year: int
         data_dict = {}
         for dataset in dataset_list:
             data = xr.open_dataset(f"{input_directory}/{dataset}_concat.nc")
-            data = data.drop_dims("depth") # Quitamos la dimensión depth que no hace falta y solo tiene un valor
-            data_dict[dataset] = data
+            data_processed = data.mean(dim="depth") # Quitamos la dimensión depth que no hace falta y solo tiene un valor
+            data_dict[dataset] = data_processed
         data_list = list(data_dict.values())
         data_combined = xr.merge(data_list)
         data_combined.to_netcdf(f"{input_directory}/data_combined.nc")
