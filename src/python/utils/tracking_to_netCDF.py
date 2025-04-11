@@ -7,7 +7,7 @@ def encontrar_bin(valor, bins):
     idx = np.digitize(valor, bins) - 1  # Restamos 1 para que el índice sea coherente con el bin izquierdo
     if idx < 0:
         idx = 0
-    if idx >= len(bins) - 1:
+    if idx >= len(bins):
         return None  # El valor está fuera del rango de bins
     return bins[idx]
 
