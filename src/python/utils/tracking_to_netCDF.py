@@ -34,6 +34,7 @@ def tracking_to_netCDF(animal_data: str, copernicus_data: str, output_file: str,
             df.rename({"decimal_latitude":"latitude", "decimal_longitude": "longitude"})
         else:
             df = pl.read_csv(animal_data)
+            df = df.with_columns(pl.col("date").str.to_datetime())
             copernicus_data = xr.open_dataset(copernicus_data) # Es data_clean.nc
 
         # Encontramos en qué celda del grid de los datos de copernicus caería cada observación
