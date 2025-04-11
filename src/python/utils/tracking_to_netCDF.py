@@ -93,7 +93,7 @@ def tracking_to_netCDF(animal_data: str, copernicus_data: str, output_file: str,
                 i = time_to_idx[t_parsed]
                 j = lat_to_idx[lat]
                 k = lon_to_idx[lon]
-                data[i, j, k] = 1
+                data[i, j, k] += 1
             else:
                 not_found += 1
 
