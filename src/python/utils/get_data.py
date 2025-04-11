@@ -63,6 +63,8 @@ def get_data(dataset_id: str, temp_path: str, box_path: str, output_file: str, o
                 fin_format = fin.strftime("%Y-%m-%dT%H:%M:%S")
                 make_requests.make_request_copernicus(dataset_id, f"{output_file}_{y}.nc",
                                                         inicio_format, fin_format, max_latitude, min_latitude, max_longitude, min_longitude, output_directory)
+
+
             print(f"AÑO: {y} FINALIZADO")
         print(f"Descarga de dataset {dataset_id} terminada")
         return True
