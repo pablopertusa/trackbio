@@ -36,8 +36,6 @@ def tracking_to_netCDF(animal_data: str, copernicus_data: str, output_file: str,
             df = pl.read_csv(animal_data)
             df = df.with_columns(pl.col("date").str.to_datetime())
             copernicus_data = xr.open_dataset(copernicus_data) # Es data_clean.nc
-            if debug: 
-                print(df)
 
         # Encontramos en qué celda del grid de los datos de copernicus caería cada observación
         df = df.with_columns([
@@ -48,6 +46,11 @@ def tracking_to_netCDF(animal_data: str, copernicus_data: str, output_file: str,
 
         if debug:
             print(df)
+            print(copernicus_data["latitude_bins"].values)
+            for v in df["latitude"].to_list():
+                print("digitize")
+                print(np.digitize(v, copernicus_data["latitude_bins"].values))
+                print(encontrar_bin(v, copernicus_data["latitude_bins"].values))
 
         # Extraer coordenadas únicas
         lat_vals = copernicus_data["latitude_bins"].values
