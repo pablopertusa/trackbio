@@ -42,7 +42,7 @@ def get_data(dataset_id: str, temp_path: str, box_path: str, output_file: str, o
         max_longitude = box["max_longitude"].to_list()[0]
         min_longitude = box["min_longitude"].to_list()[0]
 
-        print("empezamos")
+        print(f"Comenzamos descarga de dataset {dataset_id}")
         for y in range(fecha_min.year, fecha_max.year+1):
             print("---------------------------")
             print(f"AÑO: {y}")
@@ -64,11 +64,11 @@ def get_data(dataset_id: str, temp_path: str, box_path: str, output_file: str, o
                 make_requests.make_request_copernicus(dataset_id, f"{output_file}_{y}.nc",
                                                         inicio_format, fin_format, max_latitude, min_latitude, max_longitude, min_longitude, output_directory)
             print(f"AÑO: {y} FINALIZADO")
-        print("Fin de descarga de datos")
+        print(f"Descarga de dataset {dataset_id} terminada")
         return True
 
     except Exception as e:
-        print("Ha ocurrido un error, la descarga no se ha completado:")
+        print(f"Ha ocurrido un error, la descarga de {dataset_id} no se ha completado:")
         print(e)
         return False
 

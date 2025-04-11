@@ -3,8 +3,8 @@ import polars as pl
 from src.python.backend.download_data import download_data
 from src.python.backend.get_subset import get_subset
 from src.python.utils.get_grid import make_grid_files
-from src.python.utils.concat_year import concat_year
 from src.python.backend.concat_datasets import concat_datasets
+from src.python.utils.clean_data import clean_data
 
 def run_pipeline(config_path="config.json"):
     try:
@@ -67,9 +67,15 @@ def run_pipeline(config_path="config.json"):
     success_concat = concat_datasets(copernicus_datasets, input_directory, min_year, max_year)
 
     if success_concat:
-        print("Hemos llegado al final")
+        input_file = input_directory + "/data_combined.nc"
+        output_file = input_directory + "/data_clean.nc"
+        success_clean = clean_data(input_file, output_file, method="linear")
     else:
-        print("No hemos completado la ejecución")
+        print("Error en concat, no continuamos")
+        return
+
+    if success_clean:
+        print("Tenemos los datos limpios, fin de la fase de datos ambientales")
 
 if __name__ == "__main__":
     run_pipeline()

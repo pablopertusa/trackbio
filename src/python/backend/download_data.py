@@ -9,6 +9,5 @@ def download_data(dataset_list: list[str], box_path: str, temp_path: str, output
     for dataset in dataset_list:
         success = get_data(dataset, temp_path, box_path, dataset, output_directory)
         if not success:
-            print("Error en la descarga de", dataset)
             return False
     return True
