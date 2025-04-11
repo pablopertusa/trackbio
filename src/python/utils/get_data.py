@@ -47,12 +47,16 @@ def get_data(dataset_id: str, temp_path: str, box_path: str, output_file: str, o
             print("---------------------------")
             print(f"AÑO: {y}")
             if y == fecha_min.year:
-                fin = datetime.strptime(f"31-12-{y}", "%d-%m-%Y")
+                first_month = fecha_min.month
+                first_day = fecha_min.day
+                fin = datetime.strptime(f"{first_day}-{first_month}-{y}", "%d-%m-%Y")
                 fin_format = fin.strftime("%Y-%m-%dT%H:%M:%S")
                 make_requests.make_request_copernicus(dataset_id, f"{output_file}_{y}.nc",
                                                         fecha_min_format, fin_format, max_latitude, min_latitude, max_longitude, min_longitude, output_directory)
             elif y == fecha_max.year:
-                inicio = datetime.strptime(f"1-1-{y}", "%d-%m-%Y")
+                last_month = fecha_max.month
+                last_day = fecha_max.day
+                inicio = datetime.strptime(f"{last_day}-{last_month}-{y}", "%d-%m-%Y")
                 inicio_format = fin.strftime("%Y-%m-%dT%H:%M:%S")
                 make_requests.make_request_copernicus(dataset_id, f"{output_file}_{y}.nc",
                                                         inicio_format, fecha_max_format, max_latitude, min_latitude, max_longitude, min_longitude, output_directory)
