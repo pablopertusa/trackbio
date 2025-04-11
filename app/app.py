@@ -5,6 +5,7 @@ from src.python.backend.get_subset import get_subset
 from src.python.utils.get_grid import make_grid_files
 from src.python.backend.concat_datasets import concat_datasets
 from src.python.utils.clean_data import clean_data
+from src.python.utils.tracking_to_netCDF import tracking_to_netCDF
 
 def run_pipeline(config_path="config.json"):
     try:
@@ -75,7 +76,15 @@ def run_pipeline(config_path="config.json"):
         return
 
     if success_clean:
-        print("Tenemos los datos limpios, fin de la fase de datos ambientales")
+        input_file = output_file
+        output_file = data_folder + "presence_grid.nc"
+        success_grid = tracking_to_netCDF(animal_data, input_file, output_file)
+    
+    if success_grid:
+        print("Hemos terminado el procesado de los datos")
+    else:
+        print("Error al crear el grid de presencia")
+
 
 if __name__ == "__main__":
     run_pipeline()
