@@ -39,8 +39,8 @@ def tracking_to_netCDF(animal_data: str, copernicus_data: str, output_file: str,
 
         # Encontramos en qué celda del grid de los datos de copernicus caería cada observación
         df = df.with_columns([
-            (pl.col("latitude").map_elements(lambda x: encontrar_bin(x, copernicus_data["latitude_bins"].values), return_dtype=pl.Int64)).alias("lat_bin"),
-            (pl.col("longitude").map_elements(lambda x: encontrar_bin(x, copernicus_data["longitude_bins"].values), return_dtype=pl.Int64)).alias("lon_bin"),
+            (pl.col("latitude").map_elements(lambda x: encontrar_bin(x, copernicus_data["latitude_bins"].values), return_dtype=pl.Float64)).alias("lat_bin"),
+            (pl.col("longitude").map_elements(lambda x: encontrar_bin(x, copernicus_data["longitude_bins"].values), return_dtype=pl.Float64)).alias("lon_bin"),
             (pl.col("date").dt.truncate("1d")).alias("datetime_day")  # Redondeo a día
         ])
 
