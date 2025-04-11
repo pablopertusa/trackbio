@@ -31,14 +31,15 @@ def tracking_to_netCDF(animal_data: str, copernicus_data: str, output_file: str,
             df = df.filter(pl.col("year") >= 2005) # Quitar algunos años para que el dataset se pueda tratar en local
             df = df.filter(pl.col("decimal_longitude") >= -90).filter(pl.col("decimal_longitude") <= 90) # Quitar outliers
             copernicus_data = xr.open_dataset(copernicus_data) # Es data_clean.nc
+            df.rename({"decimal_latitude":"latitude", "decimal_longitude": "longitude"})
         else:
             df = pl.read_csv(animal_data)
             copernicus_data = xr.open_dataset(copernicus_data) # Es data_clean.nc
 
         # Encontramos en qué celda del grid de los datos de copernicus caería cada observación
         df = df.with_columns([
-            (pl.col("decimal_latitude").map_elements(lambda x: encontrar_bin(x, copernicus_data["latitude_bins"].values), return_dtype=pl.Float64)).alias("lat_bin"),
-            (pl.col("decimal_longitude").map_elements(lambda x: encontrar_bin(x, copernicus_data["longitude_bins"].values), return_dtype=pl.Float64)).alias("lon_bin"),
+            (pl.col("latitude").map_elements(lambda x: encontrar_bin(x, copernicus_data["latitude_bins"].values), return_dtype=pl.Float64)).alias("lat_bin"),
+            (pl.col("longitude").map_elements(lambda x: encontrar_bin(x, copernicus_data["longitude_bins"].values), return_dtype=pl.Float64)).alias("lon_bin"),
             (pl.col("date").dt.truncate("1d")).alias("datetime_day")  # Redondeo a día
         ])
 
