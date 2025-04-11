@@ -2,8 +2,10 @@ data/copernicus/*/*.nc
 src/python/utils/__pycache__/
 src/documentation
 .env
-src/jupyter/pruebas.ipynb
 data/foca.csv
 data/foca_procesado.csv
+data/datos_foca.csv
 model_example/
-data/grid_presencia.nc
+data/temporal_subset.csv
+world_box.csv
+src/jupyter/pruebas.ipynb

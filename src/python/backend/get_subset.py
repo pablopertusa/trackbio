@@ -17,6 +17,7 @@ def get_subset(path_to_csv: str, output_directory: str) -> bool:
             .with_columns(
                 pl.col("date").str.strptime(pl.Datetime, format="%Y-%m-%dT%H:%M:%S")
             )
+            .sort(by="date", descending=False)
         )
         max_latitude = tracking["latitude"].max()
         max_longitude = tracking["longitude"].max()

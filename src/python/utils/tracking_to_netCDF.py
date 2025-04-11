@@ -24,35 +24,17 @@ def ultimo_dia_del_mes(fecha):
     Retorna:
         str: Último día del mes en formato especificado.
     """
+
     fecha = pd.to_datetime(fecha)
     ultimo_dia = fecha + pd.offsets.MonthEnd(0)
     return pd.Timestamp(ultimo_dia).strftime('%Y-%m-%dT00:00:00.000000000')
 
 
-def tracking_to_netCDF(animal_data: str, copernicus_data: str, output_file: str, apply_trackbio_pipeline: bool = False, debug: bool = False) -> bool:
+def tracking_to_netCDF(animal_data: str, copernicus_data: str, output_file: str, debug: bool = False) -> bool:
     try:
 
-        if apply_trackbio_pipeline:
-            schema = {
-                "individual_id": pl.String,
-                "date": pl.String,
-                "decimal_longitude": pl.Float64,
-                "decimal_latitude": pl.Float64,
-                "year": pl.Int32,
-                "month": pl.Int8,
-                "day": pl.Int8,
-                "hour": pl.Int8,
-            }
-
-            df = pl.read_csv(animal_data, schema=schema)
-            # Aplicamos el mismo filtrado que se hizo para sacar el subconjunto de datos espacial y temporal en data_subset.ipynb
-            df = df.filter(pl.col("year") >= 2005) # Quitar algunos años para que el dataset se pueda tratar en local
-            df = df.filter(pl.col("decimal_longitude") >= -90).filter(pl.col("decimal_longitude") <= 90) # Quitar outliers
-            copernicus_data = xr.open_dataset(copernicus_data) # Es data_clean.nc
-            df.rename({"decimal_latitude":"latitude", "decimal_longitude": "longitude"})
-        else:
-            df = pl.read_csv(animal_data)
-            copernicus_data = xr.open_dataset(copernicus_data) # Es data_clean.nc
+        df = pl.read_csv(animal_data)
+        copernicus_data = xr.open_dataset(copernicus_data) # Es data_clean.nc
 
         # Encontramos en qué celda del grid de los datos de copernicus caería cada observación
         df = df.with_columns([
