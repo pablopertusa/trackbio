@@ -67,6 +67,14 @@ def tracking_to_netCDF(animal_data: str, copernicus_data: str, output_file: str,
             t_parsed = np.datetime64(t)
             lat = row["lat_bin"]
             lon = row["lon_bin"]
+            if lat not in lat_to_idx:
+                print("lat no")
+            if lon not in lon_to_idx:
+                print("lon no")
+            if t_parsed not in time_to_idx:
+                print("time no")
+                print(t)
+            
 
             if lat in lat_to_idx and lon in lon_to_idx and t_parsed in time_to_idx:
                 i = time_to_idx[t_parsed]
