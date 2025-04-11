@@ -11,13 +11,31 @@ def encontrar_bin(valor, bins):
         return None  # El valor está fuera del rango de bins
     return bins[idx]
 
+# Esta función es necesaria porque al agrupar por mes con la API de xarray, se pone como fecha del grupo
+# el último día de cada mes, por lo que es necesario para mantener la consistencia del grid.
+def ultimo_dia_del_mes(fecha):
+    """
+    Devuelve un string con el último día del mes de la fecha dada,
+    en formato 'YYYY-MM-DDT00:00:00.000000000'.
+    
+    Parámetros:
+        fecha (str o pd.Timestamp): Fecha de entrada, como string o Timestamp.
+        
+    Retorna:
+        str: Último día del mes en formato especificado.
+    """
+    fecha = pd.to_datetime(fecha)
+    ultimo_dia = fecha + pd.offsets.MonthEnd(0)
+    return pd.Timestamp(ultimo_dia).strftime('%Y-%m-%dT00:00:00.000000000')
+
+
 def tracking_to_netCDF(animal_data: str, copernicus_data: str, output_file: str, apply_trackbio_pipeline: bool = False, debug: bool = False) -> bool:
     try:
 
         if apply_trackbio_pipeline:
             schema = {
                 "individual_id": pl.String,
-                "date": pl.Datetime,
+                "date": pl.String,
                 "decimal_longitude": pl.Float64,
                 "decimal_latitude": pl.Float64,
                 "year": pl.Int32,
@@ -34,14 +52,13 @@ def tracking_to_netCDF(animal_data: str, copernicus_data: str, output_file: str,
             df.rename({"decimal_latitude":"latitude", "decimal_longitude": "longitude"})
         else:
             df = pl.read_csv(animal_data)
-            df = df.with_columns(pl.col("date").str.to_datetime())
             copernicus_data = xr.open_dataset(copernicus_data) # Es data_clean.nc
 
         # Encontramos en qué celda del grid de los datos de copernicus caería cada observación
         df = df.with_columns([
             (pl.col("latitude").map_elements(lambda x: encontrar_bin(x, copernicus_data["latitude_bins"].values), return_dtype=pl.Float64)).alias("lat_bin"),
             (pl.col("longitude").map_elements(lambda x: encontrar_bin(x, copernicus_data["longitude_bins"].values), return_dtype=pl.Float64)).alias("lon_bin"),
-            (pl.col("date").dt.truncate("1d")).alias("datetime_day")  # Redondeo a día
+            (pl.col("date").map_elements(lambda x: ultimo_dia_del_mes(x), return_dtype=str)).alias("mes")  # Redondeo a mes
         ])
 
         if debug:
@@ -70,13 +87,12 @@ def tracking_to_netCDF(animal_data: str, copernicus_data: str, output_file: str,
         # Iterar y marcar presencia
         not_found = 0
         for row in df.iter_rows(named=True):
-            t = row["datetime_day"]
-            t_parsed = np.datetime64(t)
+            t = row["mes"]
             lat = row["lat_bin"]
             lon = row["lon_bin"]
 
-            if lat in lat_to_idx and lon in lon_to_idx and t_parsed in time_to_idx:
-                i = time_to_idx[t_parsed]
+            if lat in lat_to_idx and lon in lon_to_idx and t in time_to_idx:
+                i = time_to_idx[t]
                 j = lat_to_idx[lat]
                 k = lon_to_idx[lon]
                 data[i, j, k] += 1

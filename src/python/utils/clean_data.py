@@ -8,7 +8,7 @@ def clean_data(filename_input: str, filename_output: str, method: str = "linear"
         print("Duplicados eliminados")
 
         print("Interpolando...")
-        data = data.interpolate_na(dim="time", method=method) # Quitamos los NaN interpolando sobre la dimensión del tiempo
+        data = data.interpolate_na(dim="time", method=method, fill_value="extrapolate") # Quitamos los NaN interpolando sobre la dimensión del tiempo
 
         data.to_netcdf(filename_output)
         print("Dataset procesado")
