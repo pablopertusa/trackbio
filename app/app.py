@@ -78,7 +78,7 @@ def run_pipeline(config_path="config.json"):
     if success_clean:
         input_file = output_file
         output_file = data_folder + "presence_grid.nc"
-        success_grid = tracking_to_netCDF(animal_data, input_file, output_file, debug=True)
+        success_grid = tracking_to_netCDF(animal_data, input_file, output_file, debug=False)
     
     if success_grid:
         print("Hemos terminado el procesado de los datos")
