@@ -11,7 +11,7 @@ def encontrar_bin(valor, bins):
         return None  # El valor está fuera del rango de bins
     return bins[idx]
 
-def tracking_to_netCDF(animal_data: str, copernicus_data: str, output_file: str, apply_trackbio_pipeline: bool = False) -> bool:
+def tracking_to_netCDF(animal_data: str, copernicus_data: str, output_file: str, apply_trackbio_pipeline: bool = False, debug: bool = False) -> bool:
     try:
 
         if apply_trackbio_pipeline:
@@ -36,6 +36,8 @@ def tracking_to_netCDF(animal_data: str, copernicus_data: str, output_file: str,
             df = pl.read_csv(animal_data)
             df = df.with_columns(pl.col("date").str.to_datetime())
             copernicus_data = xr.open_dataset(copernicus_data) # Es data_clean.nc
+            if debug: 
+                print(df)
 
         # Encontramos en qué celda del grid de los datos de copernicus caería cada observación
         df = df.with_columns([
@@ -43,6 +45,9 @@ def tracking_to_netCDF(animal_data: str, copernicus_data: str, output_file: str,
             (pl.col("longitude").map_elements(lambda x: encontrar_bin(x, copernicus_data["longitude_bins"].values), return_dtype=pl.Float64)).alias("lon_bin"),
             (pl.col("date").dt.truncate("1d")).alias("datetime_day")  # Redondeo a día
         ])
+
+        if debug:
+            print(df)
 
         # Extraer coordenadas únicas
         lat_vals = copernicus_data["latitude_bins"].values
@@ -59,6 +64,10 @@ def tracking_to_netCDF(animal_data: str, copernicus_data: str, output_file: str,
 
         # Crear array de ceros (esto es el grid que se irá rellenando con las observaciones)
         data = np.zeros((len(unique_times), len(lat_vals), len(lon_vals)), dtype=np.uint8)
+        if debug: 
+            print(time_to_idx)
+            print(lat_to_idx)
+            print(lon_to_idx)
 
         # Iterar y marcar presencia
         not_found = 0
