@@ -13,10 +13,10 @@ def concat_year(directory: str, filename: str, min_year: int, max_year: int) -> 
             # Nos quedamos con la media de cada mes
             data_mensual = data.resample(time="1ME").mean()
             # Lo concatenamos con el primero
-            dataset_concat = xr.combine_by_coords([dataset_concat_mensual, data_mensual])
+            dataset_concat_mensual = xr.combine_by_coords([dataset_concat_mensual, data_mensual])
             print(f"{directory}/{filename}_{y}_binned.nc", "concatenado")
 
-        dataset_concat.to_netcdf(f"{directory}/{filename}_concat.nc")
+        dataset_concat_mensual.to_netcdf(f"{directory}/{filename}_concat.nc")
         print("dataset concatenado en:", f"{directory}/{filename}_concat.nc")
         return True
 

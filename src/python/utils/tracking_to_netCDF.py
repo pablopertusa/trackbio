@@ -88,11 +88,12 @@ def tracking_to_netCDF(animal_data: str, copernicus_data: str, output_file: str,
         not_found = 0
         for row in df.iter_rows(named=True):
             t = row["mes"]
+            t_parsed = np.datetime64(t)
             lat = row["lat_bin"]
             lon = row["lon_bin"]
 
-            if lat in lat_to_idx and lon in lon_to_idx and t in time_to_idx:
-                i = time_to_idx[t]
+            if lat in lat_to_idx and lon in lon_to_idx and t_parsed in time_to_idx:
+                i = time_to_idx[t_parsed]
                 j = lat_to_idx[lat]
                 k = lon_to_idx[lon]
                 data[i, j, k] += 1
