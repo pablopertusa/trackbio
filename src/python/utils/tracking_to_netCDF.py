@@ -33,6 +33,7 @@ def ultimo_dia_del_mes(fecha):
 def tracking_to_netCDF(animal_data: str, copernicus_data: str, output_file: str, debug: bool = False) -> bool:
     try:
 
+        print("Convirtiendo los datos de tracking a grid...")
         df = pl.read_csv(animal_data)
         copernicus_data = xr.open_dataset(copernicus_data) # Es data_clean.nc
 
@@ -60,7 +61,7 @@ def tracking_to_netCDF(animal_data: str, copernicus_data: str, output_file: str,
         lon_to_idx = {lon: i for i, lon in enumerate(lon_vals)}
 
         # Crear array de ceros (esto es el grid que se irá rellenando con las observaciones)
-        data = np.zeros((len(unique_times), len(lat_vals), len(lon_vals)), dtype=np.uint8)
+        data = np.zeros((len(unique_times), len(lat_vals), len(lon_vals)), dtype=np.int64)
         if debug: 
             print(time_to_idx)
             print(lat_to_idx)

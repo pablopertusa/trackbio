@@ -19,6 +19,7 @@ def concat_datasets(dataset_list: list[str], input_directory: str, min_year: int
         data_list = list(data_dict.values())
         data_combined = xr.merge(data_list)
         data_combined.to_netcdf(f"{input_directory}/data_combined.nc")
+        print("Datasets combinados en uno único")
 
         return True
 

@@ -10,6 +10,7 @@ def get_data(dataset_id: str, temp_path: str, box_path: str, output_file: str, o
     Descarga el dataset de la API de Copernicus con el id `dataset_id`
     Devuelve True si la descarga se realiza correctamente, False en otro caso.
     """
+
     try: 
         # Cargamos desde .env
         load_dotenv()
@@ -46,6 +47,10 @@ def get_data(dataset_id: str, temp_path: str, box_path: str, output_file: str, o
         for y in range(fecha_min.year, fecha_max.year+1):
             print("---------------------------")
             print(f"AÑO: {y}")
+            path = output_directory + "/" + dataset_id + "_" + str(y) + ".nc"
+            if os.path.exists(path):
+                print(f"{dataset_id}_{y}.nc cacheado, no se inicia la descarga")
+                continue
             if y == fecha_min.year:
                 fin = datetime.strptime(f"31-12-{y}", "%d-%m-%Y")
                 fin_format = fin.strftime("%Y-%m-%dT%H:%M:%S")

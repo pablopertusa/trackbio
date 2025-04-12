@@ -9,3 +9,7 @@ model_example/
 data/temporal_subset.csv
 world_box.csv
 src/jupyter/pruebas.ipynb
+app/__pycache__/
+data/presence_grid.nc
+src/python/backend/__pycache__/
+src/model/pruebas.ipynb
