@@ -41,7 +41,7 @@ def prepare_training_data(path_to_presence_grid: str, path_to_copernicus_grid: s
     return X_train, X_test, y_train, y_test
 
 
-def print_distribution(data: np.ndarray) -> None:
+def save_distribution_image(data: np.ndarray, output_image_path: str) -> None:
     """
     La dimensión temporal debe ser la primera para que se pinten bien los resultados
     """
@@ -53,4 +53,5 @@ def print_distribution(data: np.ndarray) -> None:
     plt.title('Heatmap de la distribución')
     plt.xlabel('Longitud')
     plt.ylabel('Latitud')
-    plt.show()
+    plt.savefig(output_image_path)
+

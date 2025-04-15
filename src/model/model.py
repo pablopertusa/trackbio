@@ -1,7 +1,7 @@
 import keras
 from keras import layers
 
-def get_model(img_size: tuple[int, int], num_classes: int, num_channels: int, print_summary: bool = False):
+def get_model(img_size: tuple[int, int], num_classes: int, num_channels: int):
     inputs = keras.Input(shape=img_size + (num_channels,))
 
     ### [First half of the network: downsampling inputs] ###

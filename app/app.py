@@ -6,6 +6,8 @@ from src.python.utils.get_grid import make_grid_files
 from src.python.backend.concat_datasets import concat_datasets
 from src.python.utils.clean_data import clean_data
 from src.python.utils.tracking_to_netCDF import tracking_to_netCDF
+from src.model.prepare_training_data import prepare_training_data, save_distribution_image
+from src.model.train import train_model, predict_model
 
 def run_pipeline(config_path="config.json"):
     try:
@@ -19,7 +21,14 @@ def run_pipeline(config_path="config.json"):
         animal_data = config["animal_data"]
         copernicus_datasets = config["copernicus_datasets"]
         data_folder = config["data_folder"]
+        training_verbosity = config["training_verbosity"]
+        image_folder = config["distribution_image_folder"]
+        if data_folder[-1] != "/": # Para que todos los path sean consistentes
+            data_folder += "/"
+        if image_folder[-1] != "/": # Para que todos los path sean consistentes
+            image_folder += "/"
         grid_size = config["grid_size"]
+
     except KeyError:
         print("Tu archivo config.json no tiene los campos necesarios")
         return
@@ -67,23 +76,38 @@ def run_pipeline(config_path="config.json"):
 
     success_concat = concat_datasets(copernicus_datasets, input_directory, min_year, max_year)
 
-    if success_concat:
-        input_file = input_directory + "/data_combined.nc"
-        output_file = input_directory + "/data_clean.nc"
-        success_clean = clean_data(input_file, output_file, method="linear")
-    else:
+    if not success_concat:
         print("Error en concat, no continuamos")
         return
 
-    if success_clean:
-        input_file = output_file
-        output_file = data_folder + "presence_grid.nc"
-        success_grid = tracking_to_netCDF(animal_data, input_file, output_file, debug=False)
+    # Paso 5: Limpiamos los datos
+    input_file = input_directory + "/data_combined.nc"
+    output_file = input_directory + "/data_clean.nc"
+    success_clean = clean_data(input_file, output_file, method="linear")
+
+    if not success_clean:
+        print("Error limpiando los datos, no continuamos") 
+        return
+
+    # Paso 6: Creamos el grid con los datos de tracking
+    input_file = output_file
+    output_file = data_folder + "presence_grid.nc"
+    success_grid = tracking_to_netCDF(animal_data, input_file, output_file, debug=False)
     
-    if success_grid:
-        print("Hemos terminado el procesado de los datos")
-    else:
+    if not success_grid:
         print("Error al crear el grid de presencia")
+        return
+
+    # Paso 7: Entrenamos el modelo
+    presence_grid_file = data_folder + "presence_grid.nc"
+    copernicus_grid_file = data_folder + "copernicus/processed/data_clean.nc"
+    X_train, X_test, y_train, y_test = prepare_training_data(presence_grid_file, copernicus_grid_file, test_size=0.1, random_state=27)
+    batch_size = 16
+    model, history = train_model(X_train, X_test, y_train, y_test, batch_size, print_model_summary=training_verbosity)
+    y_pred_classes = predict_model(X_test, model)
+    output_image_path = image_folder + "test_distribution.png"
+    save_distribution_image(y_pred_classes, output_image_path)
+    
 
 
 if __name__ == "__main__":

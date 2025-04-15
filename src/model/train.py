@@ -2,7 +2,8 @@ from src.model.model import get_model
 import numpy as np
 import keras
 
-def train_model(X_train: np.ndarray, X_test: np.ndarray, y_train: np.ndarray, y_test: np.ndarray, batch_size: int = 8, print_model_summary: bool = False) -> np.ndarray:
+def train_model(X_train: np.ndarray, X_test: np.ndarray, y_train: np.ndarray, y_test: np.ndarray, 
+                batch_size: int = 8, print_model_summary: bool = False) -> np.ndarray:
     """
     Entrena una U-Net y la devuelve como resultado
     """
@@ -28,7 +29,7 @@ def train_model(X_train: np.ndarray, X_test: np.ndarray, y_train: np.ndarray, y_
 
     # Train the model, doing validation at the end of each epoch.
     epochs = 200
-    model.fit(
+    history = model.fit(
         X_train,
         y_train,
         epochs=epochs,
@@ -38,7 +39,7 @@ def train_model(X_train: np.ndarray, X_test: np.ndarray, y_train: np.ndarray, y_
         verbose=2,
     )
 
-    return model
+    return model, history
 
 def predict_model(X_test: np.ndarray, model: keras.Model) -> np.ndarray:
     y_pred = model.predict(X_test)

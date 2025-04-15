@@ -1,4 +1,5 @@
 import xarray as xr
+import os
 from pathlib import Path
 import numpy as np
 
@@ -8,6 +9,13 @@ def make_grid_files(input_directory: str, output_directory: str, grid_size: int,
         path = Path(input_directory)
         for file in path.iterdir():
             if file.name[-3:] == ".nc":
+
+                # Comprobamos si está cacheado
+                path = output_directory + "/" + file.name[:-3] + "_binned.nc"
+                if os.path.exists(path):
+                    print(f"{file.name[:-3] + "_binned.nc"} cacheado, no se inicia el proceso de binning")
+                    continue
+
                 print("Binning", file)
                 data = xr.open_dataset(file.absolute())
                 lat_bins = np.arange(latitude_min, latitude_max + grid_size, grid_size)

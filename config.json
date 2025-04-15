@@ -5,5 +5,7 @@
     ],
     "animal_data": "data/datos_foca.csv",
     "data_folder": "data/",
-    "grid_size": 1
+    "distribution_image_folder": "images/",
+    "grid_size": 1,
+    "training_verbosity": true
 }

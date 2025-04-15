@@ -4,3 +4,6 @@ pandas
 numpy
 copernicusmarine
 dotenv
+tensorflow
+scikit-learn
+matplotlib
