@@ -3,8 +3,13 @@
 
 from src.python.utils.concat_year import concat_year
 import xarray as xr
+import os
 
 def concat_datasets(dataset_list: list[str], input_directory: str, min_year: int, max_year: int) -> bool:
+    if os.path.exists(f"{input_directory}/data_combined.nc"):
+        print("data_combined.nc cacheado, no se inicia el proceso de concatenación") 
+        return True
+
     try:
         for dataset in dataset_list:
             success = concat_year(input_directory, dataset, min_year, max_year)

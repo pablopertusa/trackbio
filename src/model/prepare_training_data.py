@@ -54,4 +54,5 @@ def save_distribution_image(data: np.ndarray, output_image_path: str) -> None:
     plt.xlabel('Longitud')
     plt.ylabel('Latitud')
     plt.savefig(output_image_path)
+    print("imagen de las predicciones de distribución en test guardada en ", output_image_path)
 

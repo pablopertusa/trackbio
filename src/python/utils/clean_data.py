@@ -1,6 +1,11 @@
 import xarray as xr
+import os
 
 def clean_data(filename_input: str, filename_output: str, method: str = "linear") -> bool:
+    if os.path.exists(filename_output):
+        print("data_clean.nc cacheado, no se inicia el proceso de limpieza")
+        return True
+
     try:
         data = xr.open_dataset(filename_input)
         data = data.drop_vars(["siconc", "sithick"]) # Estas variables eran todo NaN

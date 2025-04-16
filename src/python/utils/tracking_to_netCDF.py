@@ -2,6 +2,7 @@ import polars as pl
 import numpy as np
 import xarray as xr
 import pandas as pd  # solo para fechas (xarray no acepta directamente Series de Polars)
+import os
 
 def encontrar_bin(valor, bins):
     idx = np.digitize(valor, bins) - 1  # Restamos 1 para que el índice sea coherente con el bin izquierdo
@@ -31,8 +32,11 @@ def ultimo_dia_del_mes(fecha):
 
 
 def tracking_to_netCDF(animal_data: str, copernicus_data: str, output_file: str, debug: bool = False) -> bool:
-    try:
+    if os.path.exists(output_file):
+        print("presence_grid.nc cacheado, no se inicia el proceso de transformación")
+        return True
 
+    try:
         print("Convirtiendo los datos de tracking a grid...")
         df = pl.read_csv(animal_data)
         copernicus_data = xr.open_dataset(copernicus_data) # Es data_clean.nc

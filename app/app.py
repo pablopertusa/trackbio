@@ -86,7 +86,7 @@ def run_pipeline(config_path="config.json"):
     success_clean = clean_data(input_file, output_file, method="linear")
 
     if not success_clean:
-        print("Error limpiando los datos, no continuamos") 
+        print("Error limpiando los datos, no continuamos")
         return
 
     # Paso 6: Creamos el grid con los datos de tracking
