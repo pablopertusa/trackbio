@@ -18,13 +18,13 @@ def train_model(X_train: np.ndarray, X_test: np.ndarray, y_train: np.ndarray, y_
         model.summary()
 
     model.compile(
-        optimizer=keras.optimizers.Adam(1e-4), loss="sparse_categorical_crossentropy",
+        optimizer=keras.optimizers.Adamax(1e-4), loss="sparse_categorical_crossentropy",
         metrics=["accuracy"]
     )
 
     callbacks = [
-        keras.callbacks.EarlyStopping(monitor="val_loss", patience=10, restore_best_weights=True),
-        keras.callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=3)
+        keras.callbacks.EarlyStopping(monitor="val_loss", patience=15, restore_best_weights=True),
+        keras.callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=5)
     ]
 
     # Train the model, doing validation at the end of each epoch.

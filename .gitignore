@@ -14,4 +14,5 @@ world_box.csv
 src/jupyter/pruebas.ipynb
 data/presence_grid.nc
 src/model/pruebas.ipynb
+src/jupyter/pruebas_+_mapa.ipynb
 images/

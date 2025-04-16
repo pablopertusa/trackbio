@@ -47,11 +47,12 @@ def get_model(img_size: tuple[int, int], num_classes: int, num_channels: int):
         x = layers.add([x, residual])
         previous_block_activation = x
 
-    # Resize to original image size
-    x = layers.Resizing(35, 252)(x)
 
     # Output layer: num_classes=2 para clasificación binaria con softmax
-    outputs = layers.Conv2D(num_classes, kernel_size=1, activation="softmax", padding="same")(x)
+    x = layers.Conv2D(num_classes, kernel_size=1, activation="softmax", padding="same")(x)
+
+    # Resize to original image size
+    outputs = layers.Resizing(35, 252)(x)
 
     model = keras.Model(inputs, outputs)
 
