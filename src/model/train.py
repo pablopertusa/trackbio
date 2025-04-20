@@ -18,7 +18,7 @@ def train_model(X_train: np.ndarray, X_test: np.ndarray, y_train: np.ndarray, y_
         model.summary()
 
     model.compile(
-        optimizer=keras.optimizers.Adamax(1e-4), loss="sparse_categorical_crossentropy",
+        optimizer=keras.optimizers.Adamax(1e-5), loss="sparse_categorical_crossentropy",
         metrics=["accuracy"]
     )
 
