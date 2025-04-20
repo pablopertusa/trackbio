@@ -39,20 +39,3 @@ def prepare_training_data(path_to_presence_grid: str, path_to_copernicus_grid: s
     y_test = y_test.reshape(-1, 35, 252, 1)
 
     return X_train, X_test, y_train, y_test
-
-
-def save_distribution_image(data: np.ndarray, output_image_path: str) -> None:
-    """
-    La dimensión temporal debe ser la primera para que se pinten bien los resultados
-    """
-    arr_sum = np.sum(data, axis=0)
-
-    plt.figure(figsize=(12, 6))
-    plt.imshow(arr_sum, cmap='viridis', aspect='auto')
-    plt.colorbar(label='Valor sumado')
-    plt.title('Heatmap de la distribución')
-    plt.xlabel('Longitud')
-    plt.ylabel('Latitud')
-    plt.savefig(output_image_path)
-    print("imagen de las predicciones de distribución en test guardada en ", output_image_path)
-

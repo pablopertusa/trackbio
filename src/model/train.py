@@ -1,9 +1,10 @@
 from src.model.model import get_model
 import numpy as np
 import keras
+import json
 
 def train_model(X_train: np.ndarray, X_test: np.ndarray, y_train: np.ndarray, y_test: np.ndarray, 
-                batch_size: int = 8, print_model_summary: bool = False) -> np.ndarray:
+                batch_size: int = 8, print_model_summary: bool = False, save_history: bool = False, history_path: str = "./training_history.json") -> np.ndarray:
     """
     Entrena una U-Net y la devuelve como resultado
     """
@@ -18,17 +19,17 @@ def train_model(X_train: np.ndarray, X_test: np.ndarray, y_train: np.ndarray, y_
         model.summary()
 
     model.compile(
-        optimizer=keras.optimizers.Adamax(1e-5), loss="sparse_categorical_crossentropy",
+        optimizer=keras.optimizers.Adam(1e-5), loss="sparse_categorical_crossentropy",
         metrics=["accuracy"]
     )
 
     callbacks = [
-        keras.callbacks.EarlyStopping(monitor="val_loss", patience=15, restore_best_weights=True),
-        keras.callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=5)
+        keras.callbacks.EarlyStopping(monitor="val_loss", patience=100, restore_best_weights=True),
+        keras.callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=10)
     ]
 
     # Train the model, doing validation at the end of each epoch.
-    epochs = 200
+    epochs = 300
     history = model.fit(
         X_train,
         y_train,
@@ -38,8 +39,11 @@ def train_model(X_train: np.ndarray, X_test: np.ndarray, y_train: np.ndarray, y_
         batch_size=batch_size,
         verbose=2,
     )
+    if save_history:
+        with open(history_path, "w") as file:
+            json.dump(history.history, file, indent=4)
 
-    return model, history
+    return model
 
 def predict_model(X_test: np.ndarray, model: keras.Model) -> np.ndarray:
     y_pred = model.predict(X_test)

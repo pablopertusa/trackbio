@@ -6,8 +6,10 @@ from src.python.utils.get_grid import make_grid_files
 from src.python.backend.concat_datasets import concat_datasets
 from src.python.utils.clean_data import clean_data
 from src.python.utils.tracking_to_netCDF import tracking_to_netCDF
-from src.model.prepare_training_data import prepare_training_data, save_distribution_image
+from src.model.prepare_training_data import prepare_training_data
 from src.model.train import train_model, predict_model
+from src.python.backend.print_maps import save_world_map, save_distribution_image
+from src.python.backend.set_seed import set_seed
 
 def run_pipeline(config_path="config.json"):
     try:
@@ -34,6 +36,7 @@ def run_pipeline(config_path="config.json"):
         return
 
     # Paso 1: Obtener subset
+    set_seed()
     success_subset = get_subset(animal_data, data_folder)
     if not success_subset:
         print("Error en subset, no continuamos")
@@ -103,12 +106,13 @@ def run_pipeline(config_path="config.json"):
     copernicus_grid_file = data_folder + "copernicus/processed/data_clean.nc"
     X_train, X_test, y_train, y_test = prepare_training_data(presence_grid_file, copernicus_grid_file, test_size=0.1, random_state=27)
     batch_size = 16
-    model, history = train_model(X_train, X_test, y_train, y_test, batch_size, print_model_summary=training_verbosity)
+    model = train_model(X_train, X_test, y_train, y_test, batch_size, print_model_summary=training_verbosity, save_history=True, history_path="./training_history.json")
     y_pred_classes = predict_model(X_test, model)
-    output_image_path = image_folder + "test_distribution.png"
-    save_distribution_image(y_pred_classes, output_image_path)
+    output_image_path_distribution = image_folder + "test_distribution.png"
+    output_image_path_world = image_folder + "test_distribution_map.png"
+    save_distribution_image(y_pred_classes, output_image_path_distribution)
+    save_world_map(y_pred_classes,lat_max, lat_min, lon_max, lon_min, output_image_path_world)
     
-
 
 if __name__ == "__main__":
     run_pipeline()
