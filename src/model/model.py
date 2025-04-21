@@ -7,7 +7,7 @@ def get_model(img_size: tuple[int, int], num_classes: int, num_channels: int):
     ### [First half of the network: downsampling inputs] ###
 
     # Entry block
-    x = layers.Conv2D(32, 3, strides=2, padding="same")(inputs)
+    x = layers.Conv2D(img_size[0], 3, strides=2, padding="same")(inputs)
     x = layers.BatchNormalization()(x)
     x = layers.Activation("relu")(x)
 
@@ -52,7 +52,7 @@ def get_model(img_size: tuple[int, int], num_classes: int, num_channels: int):
     x = layers.Conv2D(num_classes, kernel_size=3, activation="softmax", padding="same")(x)
 
     # Resize to original image size
-    outputs = layers.Resizing(35, 252)(x)
+    outputs = layers.Resizing(img_size[0], img_size[1])(x)
 
     model = keras.Model(inputs, outputs)
 
