@@ -107,6 +107,7 @@ Modify only the following fields according to your data and preferences:
 
 ## Notes
 
+* There is a jupyter notebook under src/jupyter/ where you can see how to parse date according to the specified format.
 * All paths should be relative to the root of the project.
 * Make sure the specified folders exist or the program will try to create them automatically.
 * The config.json that already exists is an example of how it should look like.
