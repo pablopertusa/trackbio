@@ -1,6 +1,6 @@
 # Trackbio
 
-A command-line tool designed for biologists to predict future animal locations based on historical geolocalization data and environmental variables from the Copernicus Marine Service.
+A command-line tool designed for biologists to predict future marine animal locations based on historical geolocalization data and environmental variables from the Copernicus Marine Service.
 
 ## Overview
 
@@ -13,6 +13,12 @@ This tool takes a local CSV file containing timestamped latitude and longitude d
 * Integrates animal location data with environmental variables.
 * Trains a model to predict future movement patterns.
 * Outputs predicted future locations.
+
+## Warnings
+
+Please be aware that downloading data from the API, especially when encompassing large geographical areas, can result in substantial data volumes. The downloaded dataset size is highly dependent on the spatial extent of your query and can easily reach tens or even hundreds of gigabytes. Ensure you have sufficient storage space available before initiating data downloads. If you execute the app more than once, it used the previously downloaded data (if it exists locally).
+
+Furthermore, training the predictive model can be computationally intensive. Without access to a GPU-accelerated environment, the training process may take a significant amount of time to complete. Consider utilizing hardware with GPU support to drastically reduce training durations if performance is critical. The Keras backend uses a GPU if available.
 
 ## Prerequisites
 
@@ -68,7 +74,7 @@ Below is an example of a typical `config.json` file:
         "cmems_mod_glo_phy_my_0.083deg_P1D-m",
         "cmems_mod_glo_bgc_my_0.25deg_P1D-m"
     ],
-    "animal_data": "data/datos_foca.csv",
+    "animal_data": "data/seal_data.csv",
     "data_folder": "data/",
     "distribution_image_folder": "images/",
     "grid_size": 1,
@@ -104,3 +110,4 @@ Modify only the following fields according to your data and preferences:
 * All paths should be relative to the root of the project.
 * Make sure the specified folders exist or the program will try to create them automatically.
 * The config.json that already exists is an example of how it should look like.
+* The geolocation data provided must be for a marine species that only occurs in the sea, as the data downloaded is for marine variables only.
