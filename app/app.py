@@ -36,7 +36,7 @@ def run_pipeline(config_path="config.json"):
         return
 
     # Paso 1: Obtener subset
-    set_seed()
+    set_seed(10)
     success_subset = get_subset(animal_data, data_folder)
     if not success_subset:
         print("Error en subset, no continuamos")
@@ -108,10 +108,14 @@ def run_pipeline(config_path="config.json"):
     batch_size = 16
     model = train_model(X_train, X_test, y_train, y_test, batch_size, print_model_summary=training_verbosity, save_history=True, history_path="./training_history.json")
     y_pred_classes = predict_model(X_test, model)
-    output_image_path_distribution = image_folder + "test_distribution.png"
-    output_image_path_world = image_folder + "test_distribution_map.png"
-    save_distribution_image(y_pred_classes, output_image_path_distribution)
-    save_world_map(y_pred_classes,lat_max, lat_min, lon_max, lon_min, output_image_path_world)
+    output_image_path_distribution_real = image_folder + "test_distribution_real.png"
+    output_image_path_world_real = image_folder + "test_distribution_map_real.png"
+    output_image_path_distribution_predicted = image_folder + "test_distribution_predicted.png"
+    output_image_path_world_predicted = image_folder + "test_distribution_map_predicted.png"
+    save_distribution_image(y_test, output_image_path_distribution_real, is_test=True)
+    save_world_map(y_test,lat_max, lat_min, lon_max, lon_min, output_image_path_world_real, is_test=True)
+    save_distribution_image(y_pred_classes, output_image_path_distribution_predicted)
+    save_world_map(y_pred_classes,lat_max, lat_min, lon_max, lon_min, output_image_path_world_predicted)
     
 
 if __name__ == "__main__":

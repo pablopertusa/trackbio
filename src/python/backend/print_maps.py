@@ -4,7 +4,9 @@ import cartopy.crs as ccrs
 import cartopy.feature as cfeature
 from matplotlib.colors import ListedColormap
 
-def save_world_map(y_pred_classes, lat_max, lat_min, lon_max, lon_min, output_image_path):
+def save_world_map(y_pred_classes, lat_max, lat_min, lon_max, lon_min, output_image_path, is_test=False):
+    if is_test:
+        y_pred_classes = np.squeeze(y_pred_classes)
 
     arr_sum = np.sum(y_pred_classes, axis=0)
 
@@ -32,23 +34,39 @@ def save_world_map(y_pred_classes, lat_max, lat_min, lon_max, lon_min, output_im
     mesh = ax.pcolormesh(lon_edges, lat_edges, arr_sum, cmap=red_white_cmap, shading='auto', transform=ccrs.PlateCarree())
 
     plt.colorbar(mesh, ax=ax, orientation='vertical', label='Valor sumado')
-    plt.title('Mapa de calor (predicho)')
+    if is_test:
+        plt.title('Mapa de calor (real)')
+    else:
+        plt.title('Mapa de calor (predicho)')
     plt.tight_layout()
     plt.savefig(output_image_path)
     print("imagen de las predicciones de distribución en el mundo en test guardada en ", output_image_path)
+    if is_test:
+        print("imagen de la distribución en el mundo de test guardada en ", output_image_path)
+    else:
+        print("imagen de las predicciones de distribución en el mundo en test guardada en ", output_image_path)
 
 
-def save_distribution_image(data: np.ndarray, output_image_path: str) -> None:
+def save_distribution_image(data: np.ndarray, output_image_path: str, is_test=False) -> None:
     """
     La dimensión temporal debe ser la primera para que se pinten bien los resultados
     """
+    if is_test:
+        data = np.squeeze(data)
+
     arr_sum = np.sum(data, axis=0)
 
     plt.figure(figsize=(12, 6))
     plt.imshow(arr_sum, cmap='viridis', aspect='auto')
     plt.colorbar(label='Valor sumado')
-    plt.title('Heatmap de la distribución')
+    if is_test:
+        plt.title('Heatmap de la distribución (real)')
+    else:
+        plt.title('Heatmap de la distribución (predicho)')
     plt.xlabel('Longitud')
     plt.ylabel('Latitud')
     plt.savefig(output_image_path)
-    print("imagen de las predicciones de distribución en test guardada en ", output_image_path)
+    if is_test:
+        print("imagen de la distribución en test guardada en ", output_image_path)
+    else:
+        print("imagen de las predicciones de distribución en test guardada en ", output_image_path)
