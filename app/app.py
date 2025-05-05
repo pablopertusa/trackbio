@@ -10,6 +10,7 @@ from src.model.prepare_training_data import prepare_training_data
 from src.model.train import train_model, predict_model
 from src.python.backend.print_maps import save_world_map, save_distribution_image
 from src.python.backend.set_seed import set_seed
+from src.python.backend.print_training_history import save_training_history_plot
 
 def run_pipeline(config_path="config.json"):
     try:
@@ -116,7 +117,9 @@ def run_pipeline(config_path="config.json"):
     save_world_map(y_test,lat_max, lat_min, lon_max, lon_min, output_image_path_world_real, is_test=True)
     save_distribution_image(y_pred_classes, output_image_path_distribution_predicted)
     save_world_map(y_pred_classes,lat_max, lat_min, lon_max, lon_min, output_image_path_world_predicted)
-    
+    path_to_history = "./training_history.json"
+    save_training_history_plot(path_to_history, image_folder)
+
 
 if __name__ == "__main__":
     run_pipeline()
