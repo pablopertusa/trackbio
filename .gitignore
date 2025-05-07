@@ -18,4 +18,5 @@ src/model/pruebas.ipynb
 src/jupyter/pruebas_+_mapa.ipynb
 images/
 training_history.json
+.gradio/
 images2/

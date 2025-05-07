@@ -12,7 +12,7 @@ from src.python.backend.print_maps import save_world_map, save_distribution_imag
 from src.python.backend.set_seed import set_seed
 from src.python.backend.print_training_history import save_training_history_plot
 
-def run_pipeline(config_path="config.json"):
+def run_pipeline(config_path="config.json", debug=False):
     try:
         with open(config_path, "r") as config_file:
             config = json.load(config_file)
@@ -107,7 +107,7 @@ def run_pipeline(config_path="config.json"):
     copernicus_grid_file = data_folder + "copernicus/processed/data_clean.nc"
     X_train, X_test, y_train, y_test = prepare_training_data(presence_grid_file, copernicus_grid_file, test_size=0.1, random_state=27)
     batch_size = 16
-    model = train_model(X_train, X_test, y_train, y_test, batch_size, print_model_summary=training_verbosity, save_history=True, history_path="./training_history.json")
+    model = train_model(X_train, X_test, y_train, y_test, batch_size, print_model_summary=training_verbosity, save_history=True, history_path="./training_history.json", debug=debug)
     y_pred_classes = predict_model(X_test, model)
     output_image_path_distribution_real = image_folder + "test_distribution_real.png"
     output_image_path_world_real = image_folder + "test_distribution_map_real.png"

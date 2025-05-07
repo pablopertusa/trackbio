@@ -1,68 +1,78 @@
-import gradio as gr
 import subprocess
 import time
 import os
+import gradio as gr
+import shutil
 
-def run_app(archivo):
+
+def run_app(uploaded_file):
+    """
+    Runs the app as a subprocess and processes its output.
+
+    Args:
+        uploaded_file: The uploaded file object from Gradio.
+
+    Returns:
+        A list of paths to the generated image files, or an error message.
+    """
     try:
-        proceso = subprocess.Popen(
-            ["python3", "-m", "app.app"],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            cwd=os.getcwd()
-        )
-        # No usamos process.wait() aquí para no bloquear la interfaz de Gradio.
+        if uploaded_file:
+            input_filename = os.path.basename(uploaded_file.name)
+            current_directory = os.getcwd()
+            data_directory = current_directory + "/data"
+            destination_path = os.path.join(data_directory, input_filename)
+            shutil.move(uploaded_file.name, destination_path)
+            print(f"Archivo guardado en: {destination_path}")
 
-        while proceso.poll() is None:
-            print("Procesando en segundo plano...")
-            time.sleep(2)
+            process = subprocess.Popen(
+                ["python3", "-m", "app.app"],
+                cwd=current_directory
+            )
+            process.wait()
 
-        stdout, stderr = proceso.communicate()
-        print("Salida del proceso:", stdout.decode())
-        if stderr:
-            print("Error del proceso:", stderr.decode())
-            raise RuntimeError(f"Error al ejecutar el proceso: {stderr.decode()}")
-
-        if proceso.returncode != 0:
-             raise RuntimeError(f"El proceso terminó con código de error {proceso.returncode}")
+            if process.returncode != 0:
+                raise RuntimeError(f"El proceso terminó con código de error {process.returncode}")
+        else:
+            return ["No file uploaded."]
 
     except Exception as e:
-        print(f"Error al ejecutar el comando: {e}")
-        return [f"Error al procesar: {e}"]  # Devolver un mensaje de error a Gradio
+        print(f"Error executing command: {e}")
+        return [f"Error processing: {e}"]  # Return an error message to Gradio
 
-    directorio_imagenes = "images"
-    imagenes_generadas = []
-    if os.path.exists(directorio_imagenes):
-        for nombre_archivo in os.listdir(directorio_imagenes):
-            if nombre_archivo.lower().endswith((".png", ".jpg", ".jpeg")):
-                ruta_completa = os.path.join(directorio_imagenes, nombre_archivo)
-                imagenes_generadas.append(ruta_completa)
+    images_directory = "images"
+    generated_images = []
+    if os.path.exists(images_directory):
+        for filename in os.listdir(images_directory):
+            if filename.lower().endswith((".png", ".jpg", ".jpeg")):
+                full_path = os.path.join(images_directory, filename)
+                generated_images.append(full_path)
     else:
-        print(f"Advertencia: El directorio de imágenes '{directorio_imagenes}' no existe.")
+        print(f"Warning: The images directory '{images_directory}' does not exist.")
 
-    if not imagenes_generadas:
-        print("Advertencia: No se encontraron imágenes generadas.")
-        return ["No se encontraron imágenes generadas.  Asegúrese de que el script de Python las genera."]
+    if not generated_images:
+        print("Warning: No generated images found.")
+        return ["No generated images found. Ensure the Python script generates them."]
 
-    return imagenes_generadas
+    print(generated_images)
+    return generated_images
 
 
-def interfaz_gradio():
+def gradio_interface():
     """
-    Función que define la interfaz de Gradio.
+    Function defining the Gradio interface.
     """
-    with gr.Blocks() as interfaz:
+    with gr.Blocks() as interface:
         gr.Markdown("# Trackbio")
-        boton_procesar = gr.Button("Iniciar app")
-        archivo_input = gr.File(label="Subir Archivo")
-        galeria_imagenes = gr.Gallery()
-        boton_procesar.click(
+        file_input = gr.File(label="Upload File")
+        process_button = gr.Button("Start App", variant="primary")
+        image_gallery = gr.Gallery(format="png", columns=1)
+        process_button.click(
             fn=run_app,
-            inputs=archivo_input,
-            outputs=galeria_imagenes
+            inputs=file_input,
+            outputs=image_gallery
         )
-    return interfaz
+    return interface
 
 if __name__ == "__main__":
-    interfaz = interfaz_gradio()
-    interfaz.launch()
+    interface = gradio_interface()
+    interface.launch()

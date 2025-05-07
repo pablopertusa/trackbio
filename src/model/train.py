@@ -5,7 +5,8 @@ import keras
 import json
 
 def train_model(X_train: np.ndarray, X_test: np.ndarray, y_train: np.ndarray, y_test: np.ndarray, 
-                batch_size: int = 8, print_model_summary: bool = False, save_history: bool = False, history_path: str = "./training_history.json") -> np.ndarray:
+                batch_size: int = 8, print_model_summary: bool = False, save_history: bool = False, 
+                history_path: str = "./training_history.json", debug: bool = False) -> np.ndarray:
     """
     Entrena una U-Net y la devuelve como resultado
     """
@@ -55,8 +56,12 @@ def train_model(X_train: np.ndarray, X_test: np.ndarray, y_train: np.ndarray, y_
         keras.callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.5, patience=10, min_lr=1e-8)
     ]
 
+    if debug:
+        epochs = 1
+    else:
+        epochs = 300
+
     # Train the model, doing validation at the end of each epoch.
-    epochs = 300
     history = model.fit(
         X_train,
         y_train,
