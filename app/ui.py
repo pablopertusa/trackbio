@@ -53,7 +53,7 @@ def run_app(uploaded_file):
         print("Warning: No generated images found.")
         return ["No generated images found. Ensure the Python script generates them."]
 
-    print(generated_images)
+    generated_images.sort()
     return generated_images
 
 
@@ -61,8 +61,8 @@ def gradio_interface():
     """
     Function defining the Gradio interface.
     """
-    with gr.Blocks() as interface:
-        gr.Markdown("# Trackbio")
+    with gr.Blocks(title="Trackbio") as interface:
+        gr.Markdown("<div align='center'><h1>TRACKBIO</h1></div>")
         file_input = gr.File(label="Upload File")
         process_button = gr.Button("Start App", variant="primary")
         image_gallery = gr.Gallery(format="png", columns=1)

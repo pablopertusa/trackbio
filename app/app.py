@@ -109,10 +109,10 @@ def run_pipeline(config_path="config.json", debug=False):
     batch_size = 16
     model = train_model(X_train, X_test, y_train, y_test, batch_size, print_model_summary=training_verbosity, save_history=True, history_path="./training_history.json", debug=debug)
     y_pred_classes = predict_model(X_test, model)
-    output_image_path_distribution_real = image_folder + "test_distribution_real.png"
-    output_image_path_world_real = image_folder + "test_distribution_map_real.png"
-    output_image_path_distribution_predicted = image_folder + "test_distribution_predicted.png"
-    output_image_path_world_predicted = image_folder + "test_distribution_map_predicted.png"
+    output_image_path_distribution_real = image_folder + "1_test_distribution_real.png"
+    output_image_path_world_real = image_folder + "3_test_distribution_map_real.png"
+    output_image_path_distribution_predicted = image_folder + "2_test_distribution_predicted.png"
+    output_image_path_world_predicted = image_folder + "4_test_distribution_map_predicted.png"
     save_distribution_image(y_test, output_image_path_distribution_real, is_test=True)
     save_world_map(y_test,lat_max, lat_min, lon_max, lon_min, output_image_path_world_real, is_test=True)
     save_distribution_image(y_pred_classes, output_image_path_distribution_predicted)
