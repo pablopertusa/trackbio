@@ -7,10 +7,11 @@ from src.python.backend.concat_datasets import concat_datasets
 from src.python.utils.clean_data import clean_data
 from src.python.utils.tracking_to_netCDF import tracking_to_netCDF
 from src.model.prepare_training_data import prepare_training_data
-from src.model.train import train_model, predict_model
+from src.model.train import train_model, predict_model, predict_model_probs
 from src.python.backend.print_maps import save_world_map, save_distribution_image
 from src.python.backend.set_seed import set_seed
 from src.python.backend.print_training_history import save_training_history_plot
+from src.python.backend.monthly_maps import save_distribution_maps_per_month
 
 def run_pipeline(config_path="config.json", debug=False):
     try:
@@ -51,6 +52,9 @@ def run_pipeline(config_path="config.json", debug=False):
     if not success_download:
         print("Error en download, no continuamos")
         return
+    # Esto lo usaremos para los mapas
+    temp_df = pl.read_csv(temp_path)
+    start_month = temp_df.filter(pl.col("first") == 1)["month"].to_list()[0]
 
     # Paso 3: Binning (crear grid)
     input_directory = output_directory_raw
@@ -105,10 +109,15 @@ def run_pipeline(config_path="config.json", debug=False):
     # Paso 7: Entrenamos el modelo
     presence_grid_file = data_folder + "presence_grid.nc"
     copernicus_grid_file = data_folder + "copernicus/processed/data_clean.nc"
-    X_train, X_test, y_train, y_test = prepare_training_data(presence_grid_file, copernicus_grid_file, test_size=0.1, random_state=27)
+    test_size = 0.1
+    X_train, X_test, y_train, y_test = prepare_training_data(presence_grid_file, copernicus_grid_file, test_size=test_size, random_state=27)
     batch_size = 16
     model = train_model(X_train, X_test, y_train, y_test, batch_size, print_model_summary=training_verbosity, save_history=True, history_path="./training_history.json", debug=debug)
     y_pred_classes = predict_model(X_test, model)
+    y_pred_probs = predict_model_probs(X_test, model)
+    print(y_pred_probs.shape)
+
+    # Paso 8: Guardamos los mapas y más imágenes
     output_image_path_distribution_real = image_folder + "1_test_distribution_real.png"
     output_image_path_world_real = image_folder + "3_test_distribution_map_real.png"
     output_image_path_distribution_predicted = image_folder + "2_test_distribution_predicted.png"
@@ -119,6 +128,9 @@ def run_pipeline(config_path="config.json", debug=False):
     save_world_map(y_pred_classes,lat_max, lat_min, lon_max, lon_min, output_image_path_world_predicted)
     path_to_history = "./training_history.json"
     save_training_history_plot(path_to_history, image_folder)
+
+    n_months_train = X_train.shape[0]
+    save_distribution_maps_per_month(n_months_train, start_month, y_pred_probs, lat_max, lat_min, lon_max, lon_min, image_folder)
 
 
 if __name__ == "__main__":

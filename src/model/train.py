@@ -81,3 +81,8 @@ def predict_model(X_test: np.ndarray, model: keras.Model) -> np.ndarray:
     y_pred = model.predict(X_test)
     y_pred_classes = np.argmax(y_pred, axis=-1)
     return y_pred_classes
+
+def predict_model_probs(X_test: np.ndarray, model: keras.Model) -> np.ndarray:
+    y_pred = model.predict(X_test)
+    y_pred_positive_class = y_pred[..., 1]
+    return y_pred_positive_class
