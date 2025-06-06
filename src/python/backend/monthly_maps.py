@@ -1,6 +1,6 @@
 import numpy as np
 from src.python.utils.calculate_month import calculate_month
-from src.python.backend.print_maps import save_world_map_probs
+from src.python.backend.print_maps import save_world_map_probs, save_world_map_probs_pretty
 
 def save_distribution_maps_per_month(elapsed_months: int, start_month: int, predicted_data: np.ndarray,
                                      lat_max, lat_min, lon_max, lon_min, output_image_path) -> None:
@@ -23,5 +23,5 @@ def save_distribution_maps_per_month(elapsed_months: int, start_month: int, pred
     
     for m in months:
         aux_pos_image = months.index(m) + 5 # Esto es para que las imágenes salgan en un orden concreto en la UI
-        save_world_map_probs(d[m], lat_max, lat_min, lon_max, lon_min, output_image_path + f"{aux_pos_image}_predicted_distribution_{m}", m)
+        save_world_map_probs_pretty(d[m], lat_max, lat_min, lon_max, lon_min, output_image_path + f"{aux_pos_image}_predicted_distribution_{m}", m)
 

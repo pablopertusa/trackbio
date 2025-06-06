@@ -8,7 +8,7 @@ from src.python.utils.clean_data import clean_data
 from src.python.utils.tracking_to_netCDF import tracking_to_netCDF
 from src.model.prepare_training_data import prepare_training_data
 from src.model.train import train_model, predict_model, predict_model_probs
-from src.python.backend.print_maps import save_world_map, save_distribution_image
+from src.python.backend.print_maps import save_world_map, save_distribution_image, save_world_map_pretty
 from src.python.backend.set_seed import set_seed
 from src.python.backend.print_training_history import save_training_history_plot
 from src.python.backend.monthly_maps import save_distribution_maps_per_month
@@ -122,10 +122,10 @@ def run_pipeline(config_path="config.json", debug=False):
     output_image_path_world_real = image_folder + "3_test_distribution_map_real.png"
     output_image_path_distribution_predicted = image_folder + "2_test_distribution_predicted.png"
     output_image_path_world_predicted = image_folder + "4_test_distribution_map_predicted.png"
-    save_distribution_image(y_test, output_image_path_distribution_real, is_test=True)
-    save_world_map(y_test,lat_max, lat_min, lon_max, lon_min, output_image_path_world_real, is_test=True)
-    save_distribution_image(y_pred_classes, output_image_path_distribution_predicted)
-    save_world_map(y_pred_classes,lat_max, lat_min, lon_max, lon_min, output_image_path_world_predicted)
+    #save_distribution_image(y_test, output_image_path_distribution_real, is_test=True)
+    save_world_map_pretty(y_test,lat_max, lat_min, lon_max, lon_min, output_image_path_world_real, is_test=True)
+    #save_distribution_image(y_pred_classes, output_image_path_distribution_predicted)
+    save_world_map_pretty(y_pred_classes,lat_max, lat_min, lon_max, lon_min, output_image_path_world_predicted)
     path_to_history = "./training_history.json"
     save_training_history_plot(path_to_history, image_folder)
 
